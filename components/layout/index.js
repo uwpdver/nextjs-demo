@@ -1,4 +1,6 @@
 import Head from "next/head";
+import Header from "../header";
+import Footer from "../footer";
 
 export default function Layout(props) {
   const { children, title = "" } = props;
@@ -7,9 +9,10 @@ export default function Layout(props) {
       <Head>
         <title>{title}</title>
       </Head>
-      <main className="p-10">{children}</main>
+      <Header />
+      <main>{children}</main>
 
-      <footer></footer>
+      <Footer />
 
       <style jsx>{``}</style>
 
