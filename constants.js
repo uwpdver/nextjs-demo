@@ -1,0 +1,1 @@
+export const DEFAULT_COVER_URL = "https://via.placeholder.com/150";

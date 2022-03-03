@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import Layout from "../components/layout";
-import { getAllAlbums } from "../data";
 
-export default function Home({ list = [] }) {
+export default function Home() {
   return (
     <Layout title="主页">
       <section className="">
