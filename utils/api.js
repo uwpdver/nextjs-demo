@@ -11,8 +11,8 @@ export const fetchAPI = async (path) => {
     return data;
 }
 
-export const getProducts = async () => {
-    const products = await fetchAPI('/products?populate=*');
+export const getProducts = async (query) => {
+    const products = await fetchAPI(`/products?${query}&populate=*`);
     return products;
 }
 

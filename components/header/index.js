@@ -14,23 +14,18 @@ export default function Header() {
       <nav className="flex-1">
         <ul className="flex items-center justify-center space-x-8">
           <li>
-            <Link href="/">
-              <a>首页</a>
+            <Link href="/store">
+              <a>所有商品</a>
             </Link>
           </li>
           <li>
-            <Link href="/product">
-              <a>选购</a>
+            <Link href="/store/woman">
+              <a>女装</a>
             </Link>
           </li>
           <li>
-            <Link href="/news">
-              <a>新闻</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/">
-              <a>社区</a>
+            <Link href="/store/man">
+              <a>男装</a>
             </Link>
           </li>
         </ul>

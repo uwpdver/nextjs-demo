@@ -13,7 +13,7 @@ export default function Home() {
             }
           `}</style>
           <div className="flex-1 pt-64 pb-32 ">
-            <h1 className=" text-6xl text-white">元宇宙狗已来</h1>
+            <h1 className=" text-6xl text-white">春季上新</h1>
             <Link href="/">
               <a className="rounded-full text-2xl bg-gray-400 px-6 py-2 text-white block w-max mt-8">
                 立即查看
