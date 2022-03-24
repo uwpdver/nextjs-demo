@@ -1,13 +1,19 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Image from "next/image";
 import Layout from "../../components/layout";
 import Selector from "../../components/Selector";
 import { getProducts, getProductById, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
+import { CartContext } from '../_app';
 
 export default function Product({ id, name, description, price, cover }) {
   const [selectedSize, setSelectedSize] = useState();
   const [selectedColor, setSelectedColor] = useState();
+  const { add } = useContext(CartContext);
+
+  const handleOnAddToCard = () => {
+    add({ id, name, description, price, cover })
+  }
 
   const onChangeSize = (e) => {
     if (e && e.value) {
@@ -100,7 +106,7 @@ export default function Product({ id, name, description, price, cover }) {
             ]} />
           <div className="flex space-x-4">
             <button className="flex-1 w-60 border py-2 px-4 rounded border-gray-400 hover:border-gray-800 hover:text-gray-600">立即购买</button>
-            <button className="flex-1 w-60 border py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600">加入购物车</button>
+            <button className="flex-1 w-60 border py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600" onClick={handleOnAddToCard}>加入购物车</button>
           </div>
         </div>
       </section>

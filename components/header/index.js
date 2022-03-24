@@ -1,8 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
+
+import CartIconRegular from "@fluentui/svg-icons/icons/cart_24_regular.svg";
+import { CartContext } from "../../pages/_app";
+
 
 export default function Header() {
+  const { cart, open } = useContext(CartContext);
   return (
     <header className="flex items-center px-12 h-16">
       <Link href="/">
@@ -30,10 +35,10 @@ export default function Header() {
           </li>
         </ul>
       </nav>
-      <input
-        type="search"
-        className="mr-4 px-2 w-40 rounded-full bg-gray-100"
-      />
+      <button className="relative cursor-pointer" onClick={open}>
+        <Image src={CartIconRegular} width={28} height={28} />
+        <span className="w-4 h-4 rounded-full bg-gray-700 text-white absolute top-0 right-0 text-xs text-center align-middle leading-4">{cart.length}</span>
+      </button>
     </header>
   );
 }
