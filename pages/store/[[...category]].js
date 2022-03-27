@@ -5,17 +5,10 @@ import qs from 'qs';
 import Layout from "../../components/layout";
 import { getProducts, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
-import { useContext } from 'react';
-import { CartContext } from './../_app';
 
 const GRID_ITEM_WIDTH = 300;
 
 export default function Product({ data }) {
-  const { add } = useContext(CartContext);
-  const handleOnAddToCard = (item) => {
-    add(item)
-  }
-
   return (
     <Layout title="product">
       <ul className="grid gap-x-4 gap-y-16 mt-10 mb-20 mx-auto justify-center product-grid max-w-7xl">
@@ -38,7 +31,6 @@ export default function Product({ data }) {
               </Link>
               <div className="mt-2 flex justify-between items-center">
                 <span>{`￥${price}`}</span>
-                <button className="py-1 px-2 rounded text-white bg-gray-800 text-xs" onClick={() => handleOnAddToCard({ id, name, cover: `${STRAPI_BASE_URL}${cover.data.attributes.url}`, price, description })}>添加到购物车</button>
               </div>
             </article>
           </li>

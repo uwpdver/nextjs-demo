@@ -13,7 +13,7 @@ export default function Header() {
       <Link href="/">
         <a className="flex items-center">
           <Image src="/images/logo.png" width={24} height={24} />
-          <span className="ml-1 font-bold">Moogas</span>
+          <span className="ml-1 font-bold">MOOJI</span>
         </a>
       </Link>
       <nav className="flex-1">

@@ -6,29 +6,46 @@ import { getProducts, getProductById, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
 import { CartContext } from '../_app';
 
-export default function Product({ id, name, description, price, cover }) {
+export default function Product({ id, name, description, price, cover, sizes, colors }) {
   const [selectedSize, setSelectedSize] = useState();
   const [selectedColor, setSelectedColor] = useState();
+  const [sizeRequireWarning, setSizeRequireWarning] = useState(false);
+  const [colorRequireWarning, setColorRequireWarning] = useState(false);
   const { add } = useContext(CartContext);
 
-  const handleOnAddToCard = () => {
-    add({ id, name, description, price, cover })
+  const withWarning = (fn) => {
+    if (!selectedSize) {
+      setSizeRequireWarning(true);
+    } else if (!selectedColor) {
+      setColorRequireWarning(true);
+    } else {
+      fn();
+    }
   }
+
+  const handleOnAddToCard = () => withWarning(() => {
+    const color = colors.find(clr => selectedColor === clr.value);
+    const size = sizes.find(sz => selectedSize === sz.value);
+    add({ id, name, description, price, cover, color, size });
+  })
 
   const onChangeSize = (e) => {
     if (e && e.value) {
       setSelectedSize(e.value)
+      setSizeRequireWarning(false)
     }
   }
 
   const onChangeColor = (e) => {
     if (e && e.value) {
       setSelectedColor(e.value)
+      setColorRequireWarning(false)
     }
   }
 
   const onColorSelectorItemRender = (e) => <div className='flex flex-col justify-center items-center '>
     <div className='w-4 h-4 border rounded-full' style={{ backgroundColor: e.content.colorHEX }} title={e.content.colorName} />
+    <div className='mt-1 text-xs'>{e.content.colorName}</div>
   </div>
 
   return (
@@ -52,23 +69,8 @@ export default function Product({ id, name, description, price, cover }) {
             onChange={onChangeSize}
             name="sizeSelector"
             id="product-selector-1"
-            options={[
-              {
-                key: 'S',
-                value: 'S',
-                content: 'S',
-              },
-              {
-                key: 'M',
-                value: 'M',
-                content: 'M',
-              },
-              {
-                key: 'L',
-                value: 'L',
-                content: 'L',
-              },
-            ]}
+            options={sizes}
+            warning={sizeRequireWarning}
           />
           <Selector
             title="选择颜色"
@@ -77,35 +79,10 @@ export default function Product({ id, name, description, price, cover }) {
             id="product-selector-2"
             onChange={onChangeColor}
             onItemRender={onColorSelectorItemRender}
-            options={[
-              {
-                key: 'R',
-                value: 'R',
-                content: {
-                  colorHEX: '#f00',
-                  colorName: '红'
-                },
-              },
-              {
-                key: 'G',
-                value: 'G',
-                content: {
-                  colorHEX: '#0f0',
-                  colorName: '绿'
-                },
-              },
-              {
-                key: 'B',
-                value: 'B',
-                content: {
-                  colorHEX: '#00f',
-                  colorName: '蓝'
-                },
-              },
-
-            ]} />
+            options={colors}
+            warning={colorRequireWarning}
+          />
           <div className="flex space-x-4">
-            <button className="flex-1 w-60 border py-2 px-4 rounded border-gray-400 hover:border-gray-800 hover:text-gray-600">立即购买</button>
             <button className="flex-1 w-60 border py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600" onClick={handleOnAddToCard}>加入购物车</button>
           </div>
         </div>
@@ -129,6 +106,8 @@ export const getStaticProps = async ({ params }) => {
       name,
       description,
       price,
+      sizes,
+      colors,
       cover: {
         data: {
           attributes: { url },
@@ -142,6 +121,19 @@ export const getStaticProps = async ({ params }) => {
       name,
       description,
       price,
+      sizes: sizes.map(({ id, name }) => ({
+        key: id,
+        value: id,
+        content: name
+      })),
+      colors: colors.map(({ id, name, colorCodeHEX }) => ({
+        key: id,
+        value: id,
+        content: {
+          colorName: name,
+          colorHEX: colorCodeHEX,
+        }
+      })),
       cover: `${STRAPI_BASE_URL}${url}`,
     },
   };

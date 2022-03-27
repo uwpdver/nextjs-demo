@@ -2,11 +2,17 @@ import { useContext } from "react";
 import classNames from "classnames";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import DismissIcon from "@fluentui/svg-icons/icons/dismiss_20_regular.svg";
 import { CartContext } from "../../pages/_app";
 
 export default function Cart({ isOpen, onClose }) {
   const { cart } = useContext(CartContext)
+  const router = useRouter();
+  const handleOnCheckout = () => {
+    router.push('/buy');
+    onClose();
+  }
 
   const listItemRender = (item) => (
     <li key={item.id} className="py-4">
@@ -18,6 +24,9 @@ export default function Cart({ isOpen, onClose }) {
             </div>
             <div className="flex-1">
               <div className="mb-2">{item.name}</div>
+              <div className="mb-2 text-gray-500 text-sm">
+                {`${item.size?.content}/${item.color?.content?.colorName}`}
+              </div>
               <div>￥{item.price}</div>
             </div>
           </div>
@@ -43,7 +52,7 @@ export default function Cart({ isOpen, onClose }) {
       </ul>
       <div className="flex items-center space-x-4">
         <div className="text-lg font-bold">{`总计：￥${total}`}</div>
-        <button className="flex-1 py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600">去结算</button>
+        <button className="flex-1 py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600" onClick={handleOnCheckout}>去结算</button>
       </div>
       <style jsx global>{`
         body {
