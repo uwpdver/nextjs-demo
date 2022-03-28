@@ -20,7 +20,7 @@ export default function Cart({ isOpen, onClose }) {
         <div className="cursor-point">
           <div className="flex speace-x-2">
             <div className="flex-shrink-0 relative w-32 h-32">
-              <Image src={item.cover} layout="fill" />
+              <Image src={item.cover} layout="fill" objectFit="contain" />
             </div>
             <div className="flex-1">
               <div className="mb-2">{item.name}</div>

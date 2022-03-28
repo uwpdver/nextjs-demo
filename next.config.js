@@ -1,5 +1,5 @@
 module.exports = {
     images: {
-        domains: ['via.placeholder.com', 'localhost'],
+        domains: ['via.placeholder.com', 'localhost', 'helloo.world'],
     },
 };

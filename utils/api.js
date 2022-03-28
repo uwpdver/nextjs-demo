@@ -1,4 +1,5 @@
-export const STRAPI_BASE_URL = 'http://localhost:1337';
+export const STRAPI_BASE_URL = 'http://helloo.world:1337';
+// http://localhost:1337
 
 export const getStrapiURL = (path) => {
     return `${process.env.NEXT_PUBLIC_STRAPI_API_URL || `${STRAPI_BASE_URL}/api`}${path}`;

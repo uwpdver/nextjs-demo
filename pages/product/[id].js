@@ -6,7 +6,7 @@ import { getProducts, getProductById, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
 import { CartContext } from '../_app';
 
-export default function Product({ id, name, description, price, cover, sizes, colors }) {
+export default function Product({ id, name = '', description = '', price = 0, cover, sizes = [], colors = [] }) {
   const [selectedSize, setSelectedSize] = useState();
   const [selectedColor, setSelectedColor] = useState();
   const [sizeRequireWarning, setSizeRequireWarning] = useState(false);
@@ -106,8 +106,8 @@ export const getStaticProps = async ({ params }) => {
       name,
       description,
       price,
-      sizes,
-      colors,
+      sizes = [],
+      colors = [],
       cover: {
         data: {
           attributes: { url },
