@@ -27,21 +27,19 @@ const Buy = ({ }) => {
       phone: '',
       name: '',
       adress: '',
-      province: '',
-      city: '',
-      distict: '',
+      province: '北京市',
+      city: '市辖区',
+      distict: '朝阳区',
     },
     onSubmit: values => {
       alert(JSON.stringify(values, null, 2));
     },
   })
 
+
   const provinceOptions = Object.keys(pcd);
-  const selectedProvince = '北京市';
-  const cityOptions = Object.keys(pcd[selectedProvince]);
-  const selectedCity = '市辖区';
-  const distictOptions = pcd[selectedProvince][selectedCity];
-  const selectedDistict = '朝阳区';
+  const cityOptions = Object.keys(pcd[formik.values.province]);
+  const distictOptions = pcd[formik.values.province][formik.values.city] || [];
 
   return (
     <Layout title="购买">
@@ -73,15 +71,30 @@ const Buy = ({ }) => {
 
             <label htmlFor='province-city-distict' className='mb-2 mt-4'>地区</label>
             <div className='flex '>
-              <select className='flex-1 border border-gray-800 py-1 pl-2 pr-8 rounded-l appearance-none' name='province' value={formik.values.province} onChange={formik.handleChange}>
+              <select
+                className='flex-1 border border-gray-800 py-1 pl-2 pr-8 rounded-l appearance-none'
+                name='province'
+                value={formik.values.province}
+                onChange={formik.handleChange}
+              >
                 <option value>省</option>
                 {provinceOptions.map((key) => <option value={key} key={key}>{key}</option>)}
               </select>
-              <select className='flex-1 border-y border-gray-800 py-1 pl-2 pr-8 appearance-none' name='city'>
+              <select
+                className='flex-1 border-y border-gray-800 py-1 pl-2 pr-8 appearance-none'
+                name='city'
+                value={formik.values.city}
+                onChange={formik.handleChange}
+              >
                 <option value>市</option>
                 {cityOptions.map((key) => <option value={key} key={key}>{key}</option>)}
               </select>
-              <select className='flex-1 border border-gray-800 py-1 pl-2 pr-8 rounded-r appearance-none' name="distict">
+              <select
+                className='flex-1 border border-gray-800 py-1 pl-2 pr-8 rounded-r appearance-none'
+                value={formik.values.distict}
+                onChange={formik.handleChange}
+                name="distict"
+              >
                 <option value>区</option>
                 {distictOptions.map((key) => <option value={key} key={key}>{key}</option>)}
               </select>
