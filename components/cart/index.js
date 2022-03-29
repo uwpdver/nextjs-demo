@@ -57,7 +57,7 @@ export default function Cart({ isOpen, onClose }) {
       <style jsx global>{`
         body {
           overflow: ${isOpen ? 'hidden' : 'none'};
-          padding-right: ${isOpen ? '17px' : '0'};
+          padding-right: ${isOpen ? `${document.body.clientWidth - window.innerWidth}px` : '0'};
         }
       `}</style>
     </div>
