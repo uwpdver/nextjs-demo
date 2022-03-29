@@ -36,6 +36,7 @@ export default function Cart({ isOpen, onClose }) {
   )
 
   const total = cart.reduce((acc, cur) => acc + cur.price, 0)
+  const scrollbarWidth = document.body.clientWidth - window.innerWidth;
 
   return (
     <div className={classNames("fixed flex flex-col w-96 h-screen right-0 top-0 z-10 px-6 py-6 transform translate-x-full transition-transform bg-white border-l", {
