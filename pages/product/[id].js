@@ -1,10 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import Image from "next/image";
 import Layout from "../../components/layout";
 import Selector from "../../components/Selector";
 import { getProducts, getProductById, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
-import { CartContext } from '../_app';
+import { CartContext, ImgTranslationRect } from '../_app';
 
 export default function Product({ id, name = '', description = '', price = 0, cover, sizes = [], colors = [] }) {
   const [selectedSize, setSelectedSize] = useState();
@@ -12,6 +12,14 @@ export default function Product({ id, name = '', description = '', price = 0, co
   const [sizeRequireWarning, setSizeRequireWarning] = useState(false);
   const [colorRequireWarning, setColorRequireWarning] = useState(false);
   const { add } = useContext(CartContext);
+  const { setImgTranslationRect } = useContext(ImgTranslationRect);
+  const imgElemRef = useRef(null);
+
+  useEffect(() => {
+    if (imgElemRef.current) {
+      setImgTranslationRect(imgElemRef.current.getBoundingClientRect())
+    }
+  }, [])
 
   const withWarning = (fn) => {
     if (!selectedSize) {
@@ -57,6 +65,7 @@ export default function Product({ id, name = '', description = '', price = 0, co
             width={500}
             height={500}
             objectFit="contain"
+            ref={imgElemRef}
           />
         </div>
         <div className="flex-1 flex flex-col ml-16">

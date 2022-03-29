@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import qs from 'qs';
@@ -6,13 +7,15 @@ import Layout from "../../components/layout";
 import Empty from "../../components/empty";
 import { getProducts, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
+import { ImgTranslationRect } from '../_app';
 
 const GRID_ITEM_WIDTH = 300;
 
 export default function Products({ data }) {
+  const { setImgTranslationRect } = useContext(ImgTranslationRect);
   const listItemRender = ({ id, attributes: { name, cover, price } }) => (
     <li key={id}>
-      <article className="cursor-pointer">
+      <article className="cursor-pointer" onClick={}>
         <Link href={`/product/${id}`} >
           <div className="border">
             <Image
