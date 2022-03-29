@@ -15,7 +15,7 @@ export default function Products({ data }) {
   const { setImgTranslationRect } = useContext(ImgTranslationRect);
   const listItemRender = ({ id, attributes: { name, cover, price } }) => (
     <li key={id}>
-      <article className="cursor-pointer" onClick={}>
+      <article className="cursor-pointer" >
         <Link href={`/product/${id}`} >
           <div className="border">
             <Image
