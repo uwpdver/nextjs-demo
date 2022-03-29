@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import DismissIcon from "@fluentui/svg-icons/icons/dismiss_20_regular.svg";
 import { CartContext } from "../../pages/_app";
+import Empty from '../empty';
 
 export default function Cart({ isOpen, onClose }) {
   const { cart } = useContext(CartContext)
@@ -38,9 +39,12 @@ export default function Cart({ isOpen, onClose }) {
   const total = cart.reduce((acc, cur) => acc + cur.price, 0)
 
   return (
-    <div className={classNames("fixed flex flex-col w-96 h-screen right-0 top-0 z-10 px-6 py-6 transform translate-x-full transition-transform bg-white border-l", {
-      'translate-x-0': isOpen
-    })}>
+    <div
+      className={classNames("fixed flex flex-col w-96 h-screen right-0 top-0 z-10 px-6 py-6 transform translate-x-full transition-transform bg-white border-l", {
+        'translate-x-0': isOpen
+      })}
+      role="dialog"
+    >
       <div className="flex mb-4 items-center justify-between">
         <h3 >购物车</h3>
         <button onClick={onClose}>
@@ -48,11 +52,11 @@ export default function Cart({ isOpen, onClose }) {
         </button>
       </div>
       <ul className="divide-y flex-1 overflow-y-auto scrollbar-none">
-        {cart.map(listItemRender)}
+        {cart.length === 0 ? <Empty className=" mt-24"/> : cart.map(listItemRender)}
       </ul>
       <div className="flex items-center space-x-4">
         <div className="text-lg font-bold">{`总计：￥${total}`}</div>
-        <button className="flex-1 py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600" onClick={handleOnCheckout}>去结算</button>
+        <button className="flex-1 py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600" onClick={handleOnCheckout} disabled={cart.length === 0}>去结算</button>
       </div>
       <style jsx global>{`
         body {
