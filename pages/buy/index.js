@@ -21,7 +21,7 @@ const steps = [
   },
 ]
 
-const Buy = ({ }) => {
+export default function Buy() {
   const formik = useFormik({
     initialValues: {
       phone: '',
@@ -127,5 +127,3 @@ const Buy = ({ }) => {
     </Layout>
   );
 }
-
-export default Buy;

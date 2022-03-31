@@ -1,13 +1,44 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useContext } from "react";
+import classNames from 'classnames';
 
 import CartIconRegular from "@fluentui/svg-icons/icons/cart_24_regular.svg";
 import { CartContext } from "../../pages/_app";
 
+const NAV_LIST = [
+  {
+    pathname: '/store',
+    text: '所有商品'
+  },
+  {
+    pathname: '/store/woman',
+    text: '女装'
+  },
+  {
+    pathname: '/store/man',
+    text: '男装'
+  },
+]
 
-export default function Header() {
+export default function Header({ }) {
+  const router = useRouter();
   const { cart, open } = useContext(CartContext);
+
+  const navListItemRender = ({ pathname, text }) => (
+    <li
+      key={pathname}
+      className={classNames('px-8 py-1 flex items-center justify-center', {
+        'bg-gray-800 text-white': pathname === router.asPath
+      })}
+    >
+      <Link href={pathname} >
+        <a>{text}</a>
+      </Link>
+    </li >
+  )
+
   return (
     <header className="flex items-center px-12 h-16">
       <Link href="/">
@@ -18,21 +49,7 @@ export default function Header() {
       </Link>
       <nav className="flex-1">
         <ul className="flex items-center justify-center space-x-8">
-          <li>
-            <Link href="/store">
-              <a>所有商品</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/store/woman">
-              <a>女装</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/store/man">
-              <a>男装</a>
-            </Link>
-          </li>
+          {NAV_LIST.map(navListItemRender)}
         </ul>
       </nav>
       <button className="relative cursor-pointer" onClick={open}>
