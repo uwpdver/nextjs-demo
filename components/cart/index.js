@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import classNames from "classnames";
+import { useFormik } from 'formik';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import DismissIcon from "@fluentui/svg-icons/icons/dismiss_20_regular.svg";
-import { CartContext } from "../../pages/_app";
 import Empty from '../empty';
 import CheckIcon from "../check_icon";
+import { CartContext } from "../../pages/_app";
+import { SESION_STORAGE_KEYS } from '../../constants';
 
 export default function Cart({ isOpen, onClose }) {
   const { cart } = useContext(CartContext);
@@ -24,8 +25,14 @@ export default function Cart({ isOpen, onClose }) {
       return errors;
     },
     onSubmit: async (values) => {
-      router.push('/buy');
-      onClose();
+      try {
+        const data = JSON.stringify(values.checked);
+        sessionStorage.setItem(SESION_STORAGE_KEYS.SELECTED_CART_ITEMS, data)
+        router.push('/buy');
+        onClose();
+      } catch (error) {
+        // hanlde error here
+      }
     },
   });
 
@@ -37,9 +44,7 @@ export default function Cart({ isOpen, onClose }) {
     return (
       <li key={id} className="py-4">
         <div className="flex speace-x-2">
-
-          <div className="flex-shrink-0 flex justify-center items-center">
-            <label className="relative cursor-pointer">
+          <label className="flex-shrink-0 relative flex justify-center items-center cursor-pointer">
             <input
               type="checkbox"
               name="checked"
@@ -50,13 +55,12 @@ export default function Cart({ isOpen, onClose }) {
             />
             <CheckIcon checked={checked} />
           </label>
-          </div>
 
-          <div className="flex-shrink-0 relative w-32 h-32">
           <Link href={`/product/${id}`}>
+            <div className="flex-shrink-0 relative w-32 h-32 cursor-pointer">
               <Image src={cover} layout="fill" objectFit="contain" />
+            </div>
           </Link>
-          </div>
 
           <div className="flex-1">
             <Link href={`/product/${id}`} className="mb-2">
