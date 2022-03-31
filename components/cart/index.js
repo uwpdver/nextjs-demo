@@ -21,7 +21,6 @@ export default function Cart({ isOpen, onClose }) {
       if (!values.checked.length) {
         errors.checked = '您还未选择任何商品';
       }
-      console.log('errors', errors)
       return errors;
     },
     onSubmit: async (values) => {
@@ -41,22 +40,22 @@ export default function Cart({ isOpen, onClose }) {
 
           <div className="flex-shrink-0 flex justify-center items-center">
             <label className="relative cursor-pointer">
-              <input
-                type="checkbox"
-                name="checked"
-                value={idStr}
-                className="absolute top-0 left-0 opacity-0"
-                checked={checked}
-                onChange={formik.handleChange}
-              />
-              <CheckIcon checked={checked} />
-            </label>
+            <input
+              type="checkbox"
+              name="checked"
+              value={idStr}
+              className="absolute top-0 left-0 opacity-0"
+              checked={checked}
+              onChange={formik.handleChange}
+            />
+            <CheckIcon checked={checked} />
+          </label>
           </div>
 
           <div className="flex-shrink-0 relative w-32 h-32">
-            <Link href={`/product/${id}`}>
+          <Link href={`/product/${id}`}>
               <Image src={cover} layout="fill" objectFit="contain" />
-            </Link>
+          </Link>
           </div>
 
           <div className="flex-1">
@@ -74,7 +73,7 @@ export default function Cart({ isOpen, onClose }) {
   }
 
   const isCheckedAll = values.checked.length === cart.length
-  
+
   const onCheckAllChange = () => {
     formik.setFieldValue('checked', isCheckedAll ? [] : cart.map(({ id }) => id.toString()));
   }

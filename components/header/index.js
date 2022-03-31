@@ -26,8 +26,6 @@ export default function Header({ }) {
   const router = useRouter();
   const { cart, open } = useContext(CartContext);
 
-  console.log('router', router.asPath)
-
   const navListItemRender = ({ pathname, text }) => (
     <li
       key={pathname}
