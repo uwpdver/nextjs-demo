@@ -9,6 +9,7 @@
     "@fluentui/svg-icons": "^1.1.163",
     "classnames": "^2.3.1",
     "formik": "^2.2.9",
+    "framer-motion": "^6.2.8",
     "gray-matter": "^4.0.3",
     "next": "latest",
     "postcss-flexbugs-fixes": "^5.0.2",

@@ -1,25 +1,19 @@
-import { useState, useContext, useRef, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import Image from "next/image";
+import { motion } from 'framer-motion';
 import Layout from "../../components/layout";
 import Selector from "../../components/Selector";
 import { getProducts, getProductById, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
-import { CartContext, ImgTranslationRect } from '../_app';
+import { CartContext } from '../_app';
 
 export default function Product({ id, name = '', description = '', price = 0, cover, sizes = [], colors = [] }) {
   const [selectedSize, setSelectedSize] = useState();
   const [selectedColor, setSelectedColor] = useState();
+  const [isLayoutAnimationComplete, setIsLayoutAnimationComplete] = useState(false);
   const [sizeRequireWarning, setSizeRequireWarning] = useState(false);
   const [colorRequireWarning, setColorRequireWarning] = useState(false);
   const { add } = useContext(CartContext);
-  const { setImgTranslationRect } = useContext(ImgTranslationRect);
-  const imgElemRef = useRef(null);
-
-  useEffect(() => {
-    if (imgElemRef.current) {
-      setImgTranslationRect(imgElemRef.current.getBoundingClientRect())
-    }
-  }, [])
 
   const withWarning = (fn) => {
     if (!selectedSize) {
@@ -56,22 +50,77 @@ export default function Product({ id, name = '', description = '', price = 0, co
     <div className='mt-1 text-xs'>{e.content.colorName}</div>
   </div>
 
+  const imgElem = <Image
+    src={cover || DEFAULT_COVER_URL}
+    width={500}
+    height={500}
+    objectFit="contain"
+  />
+
   return (
     <Layout title={`产品/${name}`}>
       <section className="flex max-w-5xl mx-auto mt-10 mb-20">
-        <div className="flex-shrink-0 border">
-          <Image
-            src={cover || DEFAULT_COVER_URL}
-            width={500}
-            height={500}
-            objectFit="contain"
-            ref={imgElemRef}
-          />
-        </div>
+        {
+          isLayoutAnimationComplete
+            ? <div className="flex-shrink-0 border">{imgElem}</div>
+            : <motion.div
+                layoutId={isLayoutAnimationComplete ? undefined : `cover-${id}`}
+                initial={false}
+                className="flex-shrink-0 border"
+                onLayoutAnimationComplete={() => setIsLayoutAnimationComplete(true)}
+              >
+                {imgElem}
+              </motion.div>
+        }
         <div className="flex-1 flex flex-col ml-16">
-          <h2 className="text-3xl mb-2 font-bold">{name}</h2>
-          <p className="text-2xl mb-2">{`￥ ${price}`}</p>
-          <p className="flex-1 text-gray-500">{description}</p>
+          <motion.h2
+            className="text-3xl mb-2 font-bold"
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.2,
+            }}
+          >
+            {name}
+          </motion.h2>
+          <motion.p
+            className="text-2xl mb-2"
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.4,
+            }}
+          >
+            {`￥ ${price}`}
+          </motion.p>
+          <motion.p
+            className="flex-1 text-gray-500"
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.5,
+            }}
+          >
+            {description}
+          </motion.p>
           <Selector
             title="选择尺码"
             value={selectedSize}

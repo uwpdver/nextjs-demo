@@ -1,14 +1,13 @@
 import { useState, createContext } from 'react';
+import { AnimateSharedLayout, AnimatePresence } from 'framer-motion';
 import Cart from '../components/cart';
 import '../styles/global.css'
 
 export const CartContext = createContext({ cart: [] })
-export const ImgTranslationRect = createContext({ rect: null })
 
 export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [imgTranslationRect, setImgTranslationRect] = useState(null);
 
   const add = (item) => {
     setCart((prevState) => [...prevState, item])
@@ -28,10 +27,12 @@ export default function App({ Component, pageProps }) {
 
   return (
     <CartContext.Provider value={{ cart, add, remove, open, close }}>
-      <ImgTranslationRect.Provider value={{imgTranslationRect, setImgTranslationRect}}>
-        <Component {...pageProps} />
-        <Cart isOpen={isCartOpen} onClose={close} />
-      </ImgTranslationRect.Provider>
+      <AnimateSharedLayout type="crossfade">
+        <AnimatePresence >
+          <Component {...pageProps} />
+          <Cart isOpen={isCartOpen} onClose={close} />
+        </AnimatePresence>
+      </AnimateSharedLayout>
     </CartContext.Provider>
   )
 }
