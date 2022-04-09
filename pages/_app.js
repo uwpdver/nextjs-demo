@@ -27,12 +27,8 @@ export default function App({ Component, pageProps }) {
 
   return (
     <CartContext.Provider value={{ cart, add, remove, open, close }}>
-      <AnimateSharedLayout type="crossfade">
-        <AnimatePresence >
-          <Component {...pageProps} />
-          <Cart isOpen={isCartOpen} onClose={close} />
-        </AnimatePresence>
-      </AnimateSharedLayout>
+      <Component {...pageProps} />
+      <Cart isOpen={isCartOpen} onClose={close} />
     </CartContext.Provider>
   )
 }

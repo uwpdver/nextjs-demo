@@ -14,9 +14,6 @@ const steps = [
     title: '提交订单',
   },
   {
-    title: '选择付款方式',
-  },
-  {
     title: '完成购买',
   },
 ]
@@ -71,6 +68,16 @@ export default function Buy() {
 
             <label htmlFor='province-city-distict' className='mb-2 mt-4'>地区</label>
             <div className='flex '>
+              <style jsx>
+                {`
+                  select {
+                    background-image: url(${chevronDownIcon.src});
+                    background-size: 20px;
+                    background-repeat: no-repeat;
+                    background-position: center right 8px;                    
+                  }
+                `}
+              </style>
               <select
                 className='flex-1 border border-gray-800 py-1 pl-2 pr-8 rounded-l appearance-none'
                 name='province'
@@ -98,16 +105,6 @@ export default function Buy() {
                 <option value>区</option>
                 {distictOptions.map((key) => <option value={key} key={key}>{key}</option>)}
               </select>
-              <style jsx>
-                {`
-                  select {
-                    background-image: url(${chevronDownIcon.src});
-                    background-size: 20px;
-                    background-repeat: no-repeat;
-                    background-position: center right 8px;                    
-                  }
-                `}
-              </style>
             </div>
 
             <label htmlFor='address' className='mb-2 mt-4'>详细地址</label>

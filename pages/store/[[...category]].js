@@ -11,16 +11,33 @@ import { DEFAULT_COVER_URL } from '../../constants';
 
 const GRID_ITEM_WIDTH = 300;
 
+const ulvariants = {
+  hidden: {
+
+  },
+  show: {
+    transition: {
+      staggerChildren: 0.12
+    }
+  },
+}
+
+const liVariants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+  },
+}
+
 export default function Products({ data }) {
   const listItemRender = ({ id, attributes: { name, cover, price } }) => (
-    <li key={id}>
+    <motion.li key={id} variants={liVariants}>
       <article className="cursor-pointer" >
-        <motion.div
-          initial={false}
-          layout={false}
-          layoutId={`cover-${id}`}
-          className="border"
-        >
+        <div className="border">
           <Link href={`/product/${id}`} >
             <Image
               src={`${STRAPI_BASE_URL}${cover.data.attributes.url}` || DEFAULT_COVER_URL}
@@ -30,7 +47,7 @@ export default function Products({ data }) {
               height={GRID_ITEM_WIDTH}
             />
           </Link>
-        </motion.div>
+        </div>
         <Link href={`/product/${id}`} >
           <p className="truncate block mt-4" title={name}>{name}</p>
         </Link>
@@ -38,24 +55,22 @@ export default function Products({ data }) {
           <span>{`￥${price}`}</span>
         </div>
       </article>
-    </li>
+    </motion.li>
   )
 
   return (
     <Layout title="products">
       {data.length === 0
         ? <Empty className="my-24" />
-        : <ul className="grid gap-x-4 gap-y-16 mt-10 mb-20 mx-auto justify-center product-grid max-w-7xl">
+        : <motion.ul
+          className="grid gap-x-4 gap-y-16 mt-10 mb-20 mx-auto justify-center product-grid max-w-7xl grid-cols-4"
+          initial="hidden"
+          animate="show"
+          variants={ulvariants}
+        >
           {data.map(listItemRender)}
-        </ul>
+        </motion.ul>
       }
-      <style jsx >
-        {`
-           .product-grid {
-             grid-template-columns: repeat(auto-fill, ${GRID_ITEM_WIDTH}px);
-           }
-        `}
-      </style>
     </Layout>
   );
 }

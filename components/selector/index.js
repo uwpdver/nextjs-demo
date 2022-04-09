@@ -32,7 +32,7 @@ export default function Selector({ title, options = [], value, onChange, onItemR
             onChange={() => onChange(item)}
           />
           <label
-            className={`flex justify-center items-center w-full border rounded h-12 ${value === item.value ? 'border-gray-800' : ''}`}
+            className={`flex justify-center items-center w-full border rounded h-12 ${value === item.value ? 'ring-green-300 ring-2' : ''}`}
             htmlFor={id}
           >
             {
