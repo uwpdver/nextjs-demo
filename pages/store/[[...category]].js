@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from 'framer-motion';
 import qs from 'qs';
 
 import Layout from "../../components/layout";
@@ -11,31 +10,9 @@ import { DEFAULT_COVER_URL } from '../../constants';
 
 const GRID_ITEM_WIDTH = 300;
 
-const ulvariants = {
-  hidden: {
-
-  },
-  show: {
-    transition: {
-      staggerChildren: 0.12
-    }
-  },
-}
-
-const liVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-  },
-}
-
 export default function Products({ data }) {
   const listItemRender = ({ id, attributes: { name, cover, price } }) => (
-    <motion.li key={id} variants={liVariants}>
+    <li key={id} >
       <article className="cursor-pointer" >
         <div className="border">
           <Link href={`/product/${id}`} >
@@ -55,21 +32,18 @@ export default function Products({ data }) {
           <span>{`￥${price}`}</span>
         </div>
       </article>
-    </motion.li>
+    </li>
   )
 
   return (
     <Layout title="products">
       {data.length === 0
         ? <Empty className="my-24" />
-        : <motion.ul
+        : <ul
           className="grid gap-x-4 gap-y-16 mt-10 mb-20 mx-auto justify-center product-grid max-w-7xl grid-cols-4"
-          initial="hidden"
-          animate="show"
-          variants={ulvariants}
         >
           {data.map(listItemRender)}
-        </motion.ul>
+        </ul>
       }
     </Layout>
   );

@@ -1,5 +1,4 @@
 import { useState, createContext } from 'react';
-import { AnimateSharedLayout, AnimatePresence } from 'framer-motion';
 import Cart from '../components/cart';
 import '../styles/global.css'
 

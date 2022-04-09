@@ -1,16 +1,10 @@
 import { useState, useContext } from 'react';
 import Image from "next/image";
-import { motion } from 'framer-motion';
 import Layout from "../../components/layout";
 import Selector from "../../components/Selector";
 import { getProducts, getProductById, STRAPI_BASE_URL } from "../../utils/api";
 import { DEFAULT_COVER_URL } from '../../constants';
 import { CartContext } from '../_app';
-
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0 }
-}
 
 export default function Product({
   id,
@@ -76,73 +70,42 @@ export default function Product({
   return (
     <Layout title={`产品/${name}`}>
       <section className="flex max-w-5xl mx-auto mt-10 mb-20">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex-shrink-0 border"
-        >
+        <div className="flex-shrink-0 border">
           {imgElem}
-        </motion.div>
-        <motion.div
-          className="flex-1 flex flex-col ml-16"
-          variants={{
-            hidden: {
-            },
-            show: {
-              transition: {
-                type: 'just',
-                staggerChildren: 0.12
-              }
-            }
-          }}
-          initial="hidden"
-          animate="show"
-        >
-          <motion.h2
-            className="text-3xl mb-2 font-bold"
-            variants={item}
-          >
+        </div>
+        <div className="flex-1 flex flex-col ml-16" >
+          <h2 className="text-3xl mb-2 font-bold">
             {name}
-          </motion.h2>
-          <motion.p
-            className="text-2xl mb-2"
-            variants={item}
-          >
+          </h2>
+          <p className="text-2xl mb-2">
             {`￥ ${price}`}
-          </motion.p>
-          <motion.p
-            className="flex-1 text-gray-500"
-            variants={item}
-          >
+          </p>
+          <p className="flex-1 text-gray-500">
             {description}
-          </motion.p>
-          <motion.div variants={item}>
-            <Selector
-              title="选择尺码"
-              value={selectedSize}
-              onChange={onChangeSize}
-              name="sizeSelector"
-              id="product-selector-1"
-              options={sizes}
-              warning={sizeRequireWarning}
-            />
-          </motion.div>
-          <motion.div variants={item}>
-            <Selector
-              title="选择颜色"
-              value={selectedColor}
-              name="colorSelector"
-              id="product-selector-2"
-              onChange={onChangeColor}
-              onItemRender={onColorSelectorItemRender}
-              options={colors}
-              warning={colorRequireWarning}
-            />
-          </motion.div>
-          <motion.div className="flex space-x-4" variants={item}>
+          </p>
+          <Selector
+            title="选择尺码"
+            value={selectedSize}
+            onChange={onChangeSize}
+            name="sizeSelector"
+            id="product-selector-1"
+            options={sizes}
+            warning={sizeRequireWarning}
+          />
+          <Selector
+            title="选择颜色"
+            value={selectedColor}
+            name="colorSelector"
+            id="product-selector-2"
+            onChange={onChangeColor}
+            onItemRender={onColorSelectorItemRender}
+            options={colors}
+            warning={colorRequireWarning}
+          />
+          <div className="flex space-x-4">
             <button className="flex-1 w-60 border py-2 px-4 rounded border-gray-600 text-white bg-gray-800 hover:bg-gray-600" onClick={handleOnAddToCard}>加入购物车</button>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
     </Layout>
   );
