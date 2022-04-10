@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+
 import Layout from "../components/layout";
 
 export default function Home() {
@@ -8,10 +9,7 @@ export default function Home() {
       <section className="">
         <div className="pl-32 pr-20 pt-32 py-8 text-center mx-auto relative h-[640px]">
           <div className="relative z-10" >
-            <h1
-              className="text-6xl text-gray-800 leading-snug"
-           
-            >
+            <h1 className="text-6xl text-gray-800 leading-snug">
               春季上新，春季上新
             </h1>
             <Link href="/store">

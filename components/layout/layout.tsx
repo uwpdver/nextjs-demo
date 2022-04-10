@@ -2,8 +2,12 @@ import Head from "next/head";
 import Header from "../header";
 import Footer from "../footer";
 
-export default function Layout(props) {
-  const { children, title = "" } = props;
+export interface Props {
+  title?: string;
+  children: React.ReactNode;
+}
+
+export default function Layout({ children, title = "" }) {
   return (
     <div>
       <Head>
@@ -11,12 +15,7 @@ export default function Layout(props) {
       </Head>
       <Header />
       <main>{children}</main>
-
       <Footer />
-
-      <style jsx>{``}</style>
-
-      <style jsx global>{``}</style>
     </div>
   );
 }

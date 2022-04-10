@@ -2,42 +2,28 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
-import classNames from 'classnames';
+import classNames from "classnames";
 
 import CartIconRegular from "@fluentui/svg-icons/icons/cart_24_regular.svg";
-import { CartContext } from "../../pages/_app";
+import { CartContext } from "../../components/cart";
+import { NAV_LIST } from "./constans";
 
-const NAV_LIST = [
-  {
-    pathname: '/store',
-    text: '所有商品'
-  },
-  {
-    pathname: '/store/woman',
-    text: '女装'
-  },
-  {
-    pathname: '/store/man',
-    text: '男装'
-  },
-]
-
-export default function Header({ }) {
+export default function Header({}) {
   const router = useRouter();
   const { cart, open } = useContext(CartContext);
 
   const navListItemRender = ({ pathname, text }) => (
     <li
       key={pathname}
-      className={classNames('px-8 py-1 flex items-center justify-center', {
-        'bg-gray-800 text-white': pathname === router.asPath
+      className={classNames("px-8 py-1 flex items-center justify-center", {
+        "bg-gray-800 text-white": pathname === router.asPath,
       })}
     >
-      <Link href={pathname} >
+      <Link href={pathname}>
         <a>{text}</a>
       </Link>
-    </li >
-  )
+    </li>
+  );
 
   return (
     <header className="flex items-center px-12 h-16">
@@ -54,7 +40,9 @@ export default function Header({ }) {
       </nav>
       <button className="relative cursor-pointer" onClick={open}>
         <Image src={CartIconRegular} width={28} height={28} />
-        <span className="w-4 h-4 rounded-full bg-gray-700 text-white absolute top-0 right-0 text-xs text-center align-middle leading-4">{cart.length}</span>
+        <span className="w-4 h-4 rounded-full bg-gray-700 text-white absolute top-0 right-0 text-xs text-center align-middle leading-4">
+          {cart.length}
+        </span>
       </button>
     </header>
   );
