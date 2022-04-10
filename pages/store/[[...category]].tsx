@@ -6,22 +6,20 @@ import qs from "qs";
 
 import Layout from "../../components/layout";
 import Empty from "../../components/empty";
-import { getProducts, STRAPI_BASE_URL } from "../../utils/api";
+import { getProducts } from "../../utils/api";
 import { DEFAULT_COVER_URL } from "../../constants";
+import { Product } from "../../types";
 
 const GRID_ITEM_WIDTH = 300;
 
 export default function Products({ data }) {
-  const listItemRender = ({ id, attributes: { name, cover, price } }) => (
+  const listItemRender = ({ id, name, cover, price }: Product) => (
     <li key={id}>
       <article className="cursor-pointer">
         <div className="border">
           <Link href={`/product/${id}`}>
             <Image
-              src={
-                `${STRAPI_BASE_URL}${cover.data.attributes.url}` ||
-                DEFAULT_COVER_URL
-              }
+              src={cover}
               objectFit="contain"
               loading="lazy"
               width={GRID_ITEM_WIDTH}
@@ -30,9 +28,9 @@ export default function Products({ data }) {
           </Link>
         </div>
         <Link href={`/product/${id}`}>
-          <p className="truncate block mt-4" title={name}>
+          <a className="truncate block mt-4" title={name}>
             {name}
-          </p>
+          </a>
         </Link>
         <div className="mt-2 flex justify-between items-center">
           <span>{`￥${price}`}</span>
@@ -78,6 +76,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     : "";
   const data = await getProducts(filterQuery);
   return {
-    props: { data: data },
+    props: {
+      data: data.map(({ id, attributes: { name, price, cover } }) => ({
+        id,
+        name,
+        cover:
+          `${process.env.STRAPI_BASE_URL}${cover.data.attributes.formats.small.url}` ||
+          DEFAULT_COVER_URL,
+        price,
+      })),
+    },
   };
 };

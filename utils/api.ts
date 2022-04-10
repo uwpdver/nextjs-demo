@@ -1,10 +1,5 @@
-export const STRAPI_BASE_URL = "http://helloo.world:1337";
-// http://localhost:1337
-
 export const getStrapiURL = (path: string) => {
-  return `${
-    process.env.NEXT_PUBLIC_STRAPI_API_URL || `${STRAPI_BASE_URL}/api`
-  }${path}`;
+  return `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${path}`;
 };
 
 export const fetchAPI = async (path: string) => {
@@ -14,7 +9,7 @@ export const fetchAPI = async (path: string) => {
   return data;
 };
 
-export const getProducts = async (query: string | number) => {
+export const getProducts = async (query?: string | number) => {
   const products = await fetchAPI(`/products?${query}&populate=*`);
   return products;
 };

@@ -10,6 +10,7 @@ import { SESION_STORAGE_KEYS } from "../../constants";
 import Empty from "../empty";
 import CheckIcon from "../check_icon";
 import CartContext from "./context";
+import { CartItem } from "./types";
 
 export interface Props {
   isOpen: boolean;
@@ -17,7 +18,8 @@ export interface Props {
 }
 
 export default function Cart({ isOpen, onClose }: Props) {
-  const { cart } = useContext(CartContext);
+  const { cart, increaseCount, decreaseCount, remove } =
+    useContext(CartContext);
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -44,9 +46,17 @@ export default function Cart({ isOpen, onClose }: Props) {
 
   const { values } = formik;
 
-  const listItemRender = ({ id, cover, name, size, color, price }) => {
-    const idStr = id.toString();
-    const checked = values.checked.includes(idStr);
+  const listItemRender = ({
+    productId,
+    id,
+    price,
+    name,
+    cover,
+    count,
+    size,
+    color,
+  }: CartItem) => {
+    const checked = values.checked.includes(id);
     return (
       <li key={id} className="py-4">
         <div className="flex speace-x-2">
@@ -54,7 +64,7 @@ export default function Cart({ isOpen, onClose }: Props) {
             <input
               type="checkbox"
               name="checked"
-              value={idStr}
+              value={id}
               className="absolute top-0 left-0 opacity-0"
               checked={checked}
               onChange={formik.handleChange}
@@ -62,20 +72,39 @@ export default function Cart({ isOpen, onClose }: Props) {
             <CheckIcon checked={checked} />
           </label>
 
-          <Link href={`/product/${id}`}>
+          <Link href={`/product/${productId}`}>
             <div className="flex-shrink-0 relative w-32 h-32 cursor-pointer">
               <Image src={cover} layout="fill" objectFit="contain" />
             </div>
           </Link>
 
           <div className="flex-1">
-            <Link href={`/product/${id}`}>
+            <Link href={`/product/${productId}`}>
               <a className="mb-2">{name}</a>
             </Link>
             <div className="mb-2 text-gray-500 text-sm">
               {`${size?.content}/${color?.content?.colorName}`}
             </div>
-            <div>￥{price}</div>
+            <div className="mb-2">￥{price}</div>
+            <div className="flex">
+              <button
+                className="border w-6"
+                onClick={() => (count > 1 ? decreaseCount(id) : remove(id))}
+                type="button"
+              >
+                -
+              </button>
+              <div className="border-y text-gray-500 text-sm w-10 p-1">
+                {count}
+              </div>
+              <button
+                className="border w-6"
+                onClick={() => increaseCount(id)}
+                type="button"
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
       </li>
@@ -93,7 +122,7 @@ export default function Cart({ isOpen, onClose }: Props) {
 
   const total = cart
     .filter(({ id }) => values.checked.includes(id.toString()))
-    .reduce((acc, cur) => acc + cur.price, 0);
+    .reduce((acc, cur) => acc + cur.count * cur.price, 0);
 
   return (
     <div
@@ -111,7 +140,10 @@ export default function Cart({ isOpen, onClose }: Props) {
           <Image src={DismissIcon} width={20} height={20} />
         </button>
       </div>
-      <form className="flex-1 flex flex-col" onSubmit={formik.handleSubmit}>
+      <form
+        className="flex-1 flex flex-col overflow-y-hidden"
+        onSubmit={formik.handleSubmit}
+      >
         <ul className="divide-y flex-1 overflow-y-auto scrollbar-none">
           {cart.length ? (
             cart.map(listItemRender)
@@ -147,9 +179,7 @@ export default function Cart({ isOpen, onClose }: Props) {
         {`
           body {
             overflow: ${isOpen ? "hidden" : "none"};
-            padding-right: ${isOpen
-              ? `${document.body.clientWidth - window.innerWidth}px`
-              : "0"};
+            padding-right: ${isOpen ? `17px` : "0"};
           }
         `}
       </style>

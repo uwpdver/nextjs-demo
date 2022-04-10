@@ -41,7 +41,7 @@ export default function Header({}) {
       <button className="relative cursor-pointer" onClick={open}>
         <Image src={CartIconRegular} width={28} height={28} />
         <span className="w-4 h-4 rounded-full bg-gray-700 text-white absolute top-0 right-0 text-xs text-center align-middle leading-4">
-          {cart.length}
+          {cart.reduce((acc, cur) => acc + cur.count, 0)}
         </span>
       </button>
     </header>

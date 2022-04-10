@@ -6,7 +6,7 @@ import Layout from "../../components/layout";
 import Selector from "../../components/selector";
 import { CartContext } from "../../components/cart";
 import { Product as ProductType } from "../../types";
-import { getProducts, getProductById, STRAPI_BASE_URL } from "../../utils/api";
+import { getProducts, getProductById } from "../../utils/api";
 import { DEFAULT_COVER_URL } from "../../constants";
 
 export interface Props extends ProductType {}
@@ -24,7 +24,7 @@ export default function Product({
   const [selectedColor, setSelectedColor] = useState();
   const [sizeRequireWarning, setSizeRequireWarning] = useState(false);
   const [colorRequireWarning, setColorRequireWarning] = useState(false);
-  const { add } = useContext(CartContext);
+  const { cart, add, increaseCount } = useContext(CartContext);
 
   const withWarning = (fn) => {
     if (!selectedSize) {
@@ -40,7 +40,24 @@ export default function Product({
     withWarning(() => {
       const color = colors.find((clr) => selectedColor === clr.value);
       const size = sizes.find((sz) => selectedSize === sz.value);
-      add({ id, name, description, price, cover, color, size });
+      const cartItemId = `${id}/${size.key}/${color.key}`;
+      const existedtCartItem = cart.find((item) => item.id === cartItemId);
+      if (existedtCartItem) {
+        increaseCount(cartItemId);
+      } else {
+        const newCartItem = {
+          id: cartItemId,
+          productId: id,
+          name,
+          description,
+          price,
+          cover,
+          color,
+          size,
+          count: 1,
+        };
+        add(newCartItem);
+      }
     });
 
   const onChangeSize = (e) => {
@@ -127,21 +144,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const queryId = typeof params.id === "string" ? params.id : params.id[0];
   const {
     id,
-    attributes: {
-      name,
-      description,
-      price,
-      sizes = [],
-      colors = [],
-      cover: {
-        data: {
-          attributes: { url },
-        },
-      },
-    },
-  } = await getProductById(params.id);
+    attributes: { name, description, price, sizes = [], colors = [], cover },
+  } = await getProductById(parseInt(queryId, 10));
   return {
     props: {
       id,
@@ -161,7 +168,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           colorHEX: colorCodeHEX,
         },
       })),
-      cover: `${STRAPI_BASE_URL}${url}`,
+      cover:
+        `${process.env.STRAPI_BASE_URL}${cover.data.attributes.formats.medium.url}` ||
+        DEFAULT_COVER_URL,
     },
   };
 };
