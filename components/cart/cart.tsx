@@ -25,6 +25,7 @@ export default function Cart({ isOpen, onClose }: Props) {
     initialValues: {
       checked: [],
     },
+    validateOnMount: true,
     validate: (values) => {
       const errors: { checked?: string } = {};
       if (!values.checked.length) {
@@ -111,7 +112,8 @@ export default function Cart({ isOpen, onClose }: Props) {
     );
   };
 
-  const isCheckedAll = values.checked.length === cart.length;
+  const isCheckedAll =
+    values.checked.length && values.checked.length === cart.length;
 
   const onCheckAllChange = () => {
     formik.setFieldValue(
